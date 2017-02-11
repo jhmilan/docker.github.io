@@ -21,9 +21,9 @@ var tour = {
     {
       title: "Top Navigation",
       content: "Use the top navigation to discover the types of content available.",
-      target: "top-nav",
+      target: "top-nav-container",
       placement: "bottom",
-      arrowOffset: "center",
+      arrowOffset: "560px",
       width: "570px",
       onShow: function () {
         // Show the arrow again

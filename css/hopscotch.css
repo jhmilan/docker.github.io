@@ -295,6 +295,7 @@ div.hopscotch-bubble .hopscotch-bubble-container {
 }
 div.hopscotch-bubble .hopscotch-content {
     font-family: Helvetica, Arial;
+    font-size: 16px;
     font-weight: 400;
     line-height: 17px;
     margin: -5px 0 11px;
