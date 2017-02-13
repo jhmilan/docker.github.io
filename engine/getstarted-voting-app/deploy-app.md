@@ -74,7 +74,7 @@ We'll deploy the application from the manager.
     Creating service vote_vote
     ```
 
-2.  Verify that the stack deployed as expected with `docker stack services <APP-NAME>`.
+2.  Verify that the stack deployed as expected with `docker stack services <APP-NAME>`. It could take a long while (see 2.1)
 
     ```
     docker@manager:~$ docker stack services vote
@@ -85,6 +85,21 @@ We'll deploy the application from the manager.
     vpfjr9b0qc01  vote_visualizer  replicated  1/1       dockersamples/visualizer:stable
     wctxjnwl22k4  vote_vote        replicated  2/2       dockersamples/examplevotingapp_vote:before
     zp0zyvgaguox  vote_db          replicated  1/1       postgres:9.4
+    ```
+
+2.1. It could take a long while replicating the nodes because images need to be downloaded, you can run `docker stack ps vote`
+
+    ```
+    $ docker stack ps vote
+    ID            NAME               IMAGE                                         NODE     DESIRED STATE  CURRENT STATE             ERROR  PORTS
+    ys32v6r3k6wo  vote_visualizer.1  dockersamples/visualizer:stable               manager  Running        Preparing 25 minutes ago
+    z418vpsnrzxt  vote_worker.1      dockersamples/examplevotingapp_worker:latest  manager  Running        Preparing 25 minutes ago
+    78yrmvtycvs5  vote_result.1      dockersamples/examplevotingapp_result:before  worker   Running        Running 3 minutes ago
+    ptj490z8sqb6  vote_vote.1        dockersamples/examplevotingapp_vote:before    worker   Running        Running 16 minutes ago
+    nl4451ovks0a  vote_db.1          postgres:9.4                                  manager  Running        Running 6 minutes ago
+    vwncli57w1p0  vote_redis.1       redis:alpine                                  worker   Running        Running 23 minutes ago
+    iyqvq5x4vrat  vote_vote.2        dockersamples/examplevotingapp_vote:before    manager  Running        Running 10 minutes ago
+    u6xha96kiw09  vote_redis.2       redis:alpine                                  manager  Running        Running 22 minutes ago
     ```
 
 ## What's next?
