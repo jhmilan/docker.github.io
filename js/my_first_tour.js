@@ -1,3 +1,26 @@
+function isFunction(possibleFunction) {
+  return typeof(possibleFunction) === typeof(Function);
+}
+
+// Find which tab is currently active
+function findActiveTab() {
+  var tab;
+  $( "#top-nav li" ).each(function() {
+    if ( $( this ).hasClass( "active" ) ) {
+      tab = $( this ).attr('id');
+    }
+  });
+  return tab;
+}
+
+var wasActive = findActiveTab();
+
+function removeActiveFromTabs() {
+  $( "#top-nav li" ).each(function() {
+    $( this ).removeClass( "active" );
+  });
+}
+
 // Define the tour!
 var tour = {
   id: "hello-hopscotch",
@@ -8,7 +31,8 @@ var tour = {
       target: "main-content",
       placement: "top",
       xOffset: "center",
-      yOffset: "300px",
+      yOffset: "400px",
+      width: "400px",
       onShow: function () {
         // Hide the arrow on the first navigation bubble
         $('.hopscotch-bubble-arrow-container').css('visibility', 'hidden');
@@ -35,7 +59,11 @@ var tour = {
       content: "Use the <b>Guides</b> to learn how to install, configure, and manage Docker as a whole, or to view the docs archives for previous Docker versions.",
       target: "top-nav",
       placement: "bottom",
-      width: "570px"
+      width: "570px",
+      onShow: function() {
+        removeActiveFromTabs();
+        $('#guides').addClass('active');
+      }
     },
     {
       title: "Product Manuals",
@@ -43,7 +71,11 @@ var tour = {
       target: "top-nav",
       placement: "bottom",
       width: "570px",
-      arrowOffset: "140px"
+      arrowOffset: "140px",
+      onShow: function() {
+        removeActiveFromTabs();
+        $('#manuals').addClass('active');
+      }
     },
     {
       title: "Glossary",
@@ -51,7 +83,11 @@ var tour = {
       target: "top-nav",
       placement: "bottom",
       width: "570px",
-      arrowOffset: "280px"
+      arrowOffset: "280px",
+      onShow: function() {
+        removeActiveFromTabs();
+        $('#glossary').addClass('active');
+      }
     },
     {
       title: "Reference",
@@ -59,7 +95,11 @@ var tour = {
       target: "top-nav",
       placement: "bottom",
       width: "570px",
-      arrowOffset: "390px"
+      arrowOffset: "390px",
+      onShow: function() {
+        removeActiveFromTabs();
+        $('#reference').addClass('active');
+      }
     },
     {
       title: "Samples",
@@ -67,7 +107,16 @@ var tour = {
       target: "top-nav",
       placement: "bottom",
       width: "570px",
-      arrowOffset: "490px"
+      arrowOffset: "490px",
+      onShow: function() {
+        // Set class `active` on the samples section
+        removeActiveFromTabs();
+        $('#samples').addClass('active');
+      },
+      onNext: function() {
+        removeActiveFromTabs();
+        $( "#" + wasActive ).addClass('active');
+      }
     },
     {
       title: "Left Navigation",
@@ -109,11 +158,17 @@ var tour = {
   scrollTopMargin: 200,
   skipIfNoElement: false,
   onEnd: function() {
+    // reset the active tab if they bail before it is done
+    removeActiveFromTabs();
+    $( "#" + wasActive ).addClass('active');
     // Return them back where they came from when the tour ends
     hopscotch.endTour(true);
     window.location = document.referrer;
   },
   onClose: function() {
+    // reset the active tab if they bail before it is done
+    removeActiveFromTabs();
+    $( "#" + wasActive ).addClass('active');
     // Return them back where they came from if they end the tour early
     hopscotch.endTour(true);
     window.location = document.referrer;
@@ -124,15 +179,12 @@ var tour = {
 $("#start-tour").click(function(){
   hopscotch.endTour(true);
   hopscotch.startTour(tour);
-  // Only load segment on the real site
-  if (ga() != 'undefined') {
-    ga('send', {
-      hitType: 'event',
-      eventCategory: 'Tour',
-      eventAction: 'play',
-      eventLabel: 'Navigation Tour'
-    });
-  }
+  ga('send', {
+    hitType: 'event',
+    eventCategory: 'Tour',
+    eventAction: 'play',
+    eventLabel: 'Navigation Tour'
+  });
 });
 
 // Resume tour if already in progress
